@@ -142,8 +142,11 @@ plot_knmi <- function(knmi_raster) {
 #' @export
 knmi_to_polygon <- function(knmi_raster, threshold = 50, method = "chaikin", ...) {
   knmi_raster[knmi_raster <= threshold] <- NA
-  raster::rasterToPolygons(as(knmi_raster, "Raster"), dissolve = TRUE) %>%
-    st_as_sf() %>%
-    st_union() %>%
-    smoothr::smooth(method = method, ...)
+  pols <- raster::rasterToPolygons(as(knmi_raster, "Raster"), dissolve = TRUE)
+  if (!is.null(pols)) {
+    pols %>%
+      st_as_sf() %>%
+      st_union() %>%
+      smoothr::smooth(method = method, ...)
+  }
 }

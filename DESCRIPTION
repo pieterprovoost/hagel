@@ -1,6 +1,6 @@
 Package: hagel
 Title: Download weather radar data for Belgium and The Netherlands
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = c("aut", "cre"))
 Description: Download weather radar data for Belgium and The Netherlands.
 License: `use_mit_license()`
