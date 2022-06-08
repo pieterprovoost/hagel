@@ -142,11 +142,16 @@ plot_knmi <- function(knmi_raster) {
 #' @export
 knmi_to_polygon <- function(knmi_raster, threshold = 50, method = "chaikin", ...) {
   knmi_raster[knmi_raster <= threshold] <- NA
+  clumped <- raster::clump(as(knmi_raster, "Raster")) %>% st_as_stars()
+  knmi_raster$clumps <- clumped$clumps
   pols <- raster::rasterToPolygons(as(knmi_raster, "Raster"), dissolve = TRUE)
   if (!is.null(pols)) {
     pols %>%
       st_as_sf() %>%
-      st_union() %>%
+      filter(layer > 0) %>%
+      group_by(clumps) %>%
+      summarize(p_min = min(layer), p_max = max(layer)) %>%
+      select(-clumps) %>%
       smoothr::smooth(method = method, ...)
   }
 }
